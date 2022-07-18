@@ -6,7 +6,7 @@
 int main(void) {
   P1DIR |= LEDS;
   P1OUT &= ~LED_GREEN;
-  P1OUT |= LED_RED;
+  P1OUT &= ~LED_RED;
 
   configureClocks();		/* setup master oscillator, CPU & peripheral clocks */
   enableWDTInterrupts();	/* enable periodic interrupt */
@@ -24,8 +24,11 @@ void blinkUpdate() // called every 1/250s to blink with duty cycle 1/blinkLimit
   if (blinkCount >= blinkLimit) {
     blinkCount = 0;
     greenControl(1);
-  } else
+    redControl(1);
+  } else {
     greenControl(0);
+    redControl(0);
+  }
 }
 
 void oncePerSecond() // repeatedly start bright and gradually lower duty cycle, one step/sec

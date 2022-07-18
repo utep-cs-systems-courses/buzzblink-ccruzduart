@@ -6,5 +6,5 @@
 #define LEDS (BIT0 | BIT6)
 
 void greenControl(int on);
-
+void redControl(int on);
 #endif // included

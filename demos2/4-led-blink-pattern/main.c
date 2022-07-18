@@ -6,7 +6,7 @@
 int main(void) {
   P1DIR |= LEDS;
   P1OUT &= ~LED_GREEN;
-  P1OUT |= LED_RED;
+  P1OUT &= ~LED_RED;
 
   configureClocks();		/* setup master oscillator, CPU & peripheral clocks */
   enableWDTInterrupts();	/* enable periodic interrupt */
@@ -15,10 +15,13 @@ int main(void) {
 }
 
 // global state vars that control blinking
-int blinkLimit = 5;  // duty cycle = 1/blinkLimit
+int blinkLimit = 0;  // duty cycle = 1/blinkLimit
 int blinkCount = 0;  // cycles 0...blinkLimit-1
 int secondCount = 0; // state var representing repeating time 0…1s
 
+int blinkLimit2 = 8;
+int blinkCount2 = 0;
+int secondCount2 = 0;
 void
 __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
@@ -30,13 +33,24 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
   } else		          // off for blinkLimit - 1 interrupt periods
     P1OUT &= ~LED_GREEN;
 
+  blinkCount2 ++;
+  if (blinkCount2 >= blinkLimit2) {
+    blinkCount2 = 0;
+    P1OUT |= LED_RED;
+  } else
+    P1OUT &= ~LED_RED;
+  
   // measure a second
   secondCount ++;
-  if (secondCount >= 250) {  // once each second
+  if (secondCount >= 125) {  // once each second
     secondCount = 0;
-    blinkLimit ++;	     // reduce duty cycle
+    blinkLimit ++;           // reduce duty cycle
+    blinkLimit2 --;
     if (blinkLimit >= 8)     // but don't let duty cycle go below 1/7.
       blinkLimit = 0;
+    if (blinkLimit2 <= 0)
+      blinkLimit2 = 8;
   }
+  
 } 
 

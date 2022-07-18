@@ -14,7 +14,7 @@ int main(void) {
   or_sr(0x18);		/* CPU off, GIE on */
 }
 
-void greenControl(int on)
+void greenControl(int on)         //  in charge of turning on the green led
 {
   if (on) {
     P1OUT |= LED_GREEN;
@@ -29,10 +29,10 @@ void blinkUpdate() // called every 1/250s to blink with duty cycle 1/blinkLimit
 {
   static int blinkCount = 0; // state var representing blink state
   blinkCount ++;
-  if (blinkCount >= blinkLimit) {
-    blinkCount = 0;
-    greenControl(1);
-  } else
+  if (blinkCount >= blinkLimit) { // the light well be on when the blinkCount is equal to the limit
+    blinkCount = 0;               // being off more often as the limit increses well make the light
+    greenControl(1);              // dimmer
+  } else                          // 
     greenControl(0);
 }
 
@@ -46,20 +46,20 @@ void oncePerSecond() // repeatedly start bright and gradually lower duty cycle, 
 void secondUpdate()  // called every 1/250 sec to call oncePerSecond once per second
 {
   static int secondCount = 0; // state variable representing repeating time 0…1s
-  secondCount ++;
-  if (secondCount >= 250) { // once each second
-    secondCount = 0;
+  secondCount ++;            // a better name could be interruptCount
+  if (secondCount >= 250) { // once each second or every 250 interrupts 
+    secondCount = 0;       // resets the state variable
     oncePerSecond();
   } }
 
-void timeAdvStateMachines() // called every 1/250 sec
+void timeAdvStateMachines() // called every interrupt,250 times per sec
 {
   blinkUpdate();
   secondUpdate();
 }
 
 
-void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
+void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts every sec */
 {
   // handle blinking   
   timeAdvStateMachines();
