@@ -23,6 +23,7 @@ void main(void)
   or_sr(0x18);  // CPU off, GIE on
 } 
 
+int ledState = 0;
 void
 switch_interrupt_handler()
 {
@@ -34,14 +35,31 @@ switch_interrupt_handler()
 
 /* up=red, down=green */
   if (p1val & SW1) {
-    P1OUT |= LED_RED;
-    P1OUT &= ~LED_GREEN;
-  } else {
-    P1OUT |= LED_GREEN;
-    P1OUT &= ~LED_RED;
+    led_state();
+    ledState++;
+    if(ledState > 3) ledState = 0;
   }
 }
 
+void led_state() {
+  switch (ledState) {
+  case 0:
+    P1OUT |= LED_GREEN;
+    P1OUT &= ~LED_RED;
+    break;
+  case 1:
+    P1OUT |= LED_RED;
+    P1OUT &= ~LED_GREEN;
+    break;
+  case 2:
+    P1OUT |= LED_RED;
+    P1OUT |= LED_GREEN;
+    break;
+  case 3:
+    P1OUT &= ~LED_RED;
+    P1OUT &= ~LED_GREEN;
+  }
+}
 
 /* Switch on P1 (S2) */
 void
