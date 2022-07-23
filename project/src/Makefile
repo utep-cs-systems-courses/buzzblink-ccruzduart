@@ -1,4 +1,4 @@
-COMMON_OBJECTS = led.o wdinterrupt.o main.o
+COMMON_OBJECTS = led.o wdinterrupt.o main.o switches.o states.o buzzer.o
 CPU	       = msp430g2553
 CFLAGS	       = -mmcu=${CPU} -I../h
 LDFLAGS        = -L/opt/ti/msp430_gcc/include
@@ -17,5 +17,4 @@ load: project2.elf
 clean:
 	rm -f *.o *.elf
 
-led.o: led.c led.h
-wdinterrupt.o: led.h
+$(COMMON_OBJECTS): led.c led.h switches.h buzzer.h states.h 

@@ -7,5 +7,7 @@
 
 void led_init();
 void led_update();
+void toggle_red(int on);
+void toggle_green(int on);
 
 #endif
