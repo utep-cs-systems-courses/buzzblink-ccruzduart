@@ -5,8 +5,7 @@ void led_init() {
   P1DIR |= LEDS;
 }
 
-int off = 0;
-void led_update() {
+void led_update(int off) {
   if (off) {
     P1OUT &= ~LED_RED;
     P1OUT |= LED_GREEN;

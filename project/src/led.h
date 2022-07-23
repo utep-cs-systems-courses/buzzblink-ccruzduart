@@ -6,7 +6,7 @@
 #define LEDS (BIT0 | BIT6)
 
 void led_init();
-void led_update();
+void led_update(int off);
 void toggle_red(int on);
 void toggle_green(int on);
 

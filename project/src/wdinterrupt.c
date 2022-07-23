@@ -6,6 +6,7 @@
 
 char stateVal = 0;
 int secondCount = 0;
+int off = 0;
 void __interrupt_vec(WDT_VECTOR) WDT() {
   secondCount++;
   if (stateVal == 0) {                      //state 0
@@ -19,8 +20,10 @@ void __interrupt_vec(WDT_VECTOR) WDT() {
   
   if (stateVal == 1) {                      //state 1 
     if (secondCount >= 250) {               // turn green on and red off and switch them
-      led_update();
+      led_update(off);
       secondCount = 0;
+      if (off) off = 0;
+      else off = 1;
     }
     buzzerOff();
   }
