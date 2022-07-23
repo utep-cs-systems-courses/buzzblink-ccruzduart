@@ -42,12 +42,14 @@ void __interrupt_vec(WDT_VECTOR) WDT() {
     }
   }
   else if (stateVal == 4) {               //state 4
-    dimLeds();                            // siren with high to low
+
+    songOfHealing();
+    /*dimLeds();                            // siren with high to low
     buzzer_set_period();                  // but not jumping going back slowly
     if (secondCount >= 125) {             // with state 2 leds combine
       secondCount = 0;
       dimLimitControl();
       updateCyclesFaster();
-    }
+      }*/
   }
 }
